@@ -4,11 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
