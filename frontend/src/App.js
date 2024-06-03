@@ -34,8 +34,8 @@ function App() {
     <>
       <Container>
         <h1>Users</h1>
-        <Form />
-        <Grid users={users} />
+        <Form onEdit={onEdit} setOnEdit={setOnEdit} getUsers={getUsers} />
+        <Grid setOnEdit={setOnEdit} users={users} setUsers={setUsers} />
       </Container>
       <GlobalStyle />
     </>

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FaEdit, FaTrash} from "react-icons/fa";
+import axios from "axios"
 
 const Table = styled.table`
   width: 100%;
@@ -39,8 +40,26 @@ export const Td = styled.td`
   }
 `;
 
-const Grid = ({users}) => 
+const Grid = ({users, setUsers, setOnEdit}) => 
 {
+  const handleDelete = async (id) => 
+  {
+    await axios
+      .delete("http://localhost:8800/users/" + id)
+      .then(({ data }) => 
+      {
+        const newArray = users.filter((user) => user.id !== id);
+        setUsers(newArray);
+      })
+
+    setOnEdit(null)
+  };
+
+  const handleEdit = (item) => 
+  {
+    setOnEdit(item)
+  };
+
     return(
         <Table>
             <Thead>
@@ -59,10 +78,10 @@ const Grid = ({users}) =>
                         <Td width="30%">{item.email}</Td>
                         <Td width="20%" onlyWeb>{item.phone}</Td>
                         <Td alignCenter width="5%">
-                            <FaEdit />
+                            <FaEdit onClick={() => handleEdit(item)} />
                         </Td>
                         <Td alignCenter width="5%">
-                            <FaTrash />
+                            <FaTrash onClick={() => handleDelete(item.id)} />
                         </Td>
                     </Tr>
                 ))}

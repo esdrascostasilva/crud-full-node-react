@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 
 const FormContainer = styled.form`
@@ -38,30 +39,74 @@ const Button = styled.button`
   height: 42px;
 `;
 
-const Form = ({onEdit}) => 
-{
-    const ref = useRef();
+const Form = ({ getUsers, onEdit, setOnEdit }) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    if (onEdit) {
+      const user = ref.current;
+
+      user.name.value = onEdit.name;
+      user.email.value = onEdit.email;
+      user.phone.value = onEdit.phone;
+      user.birth_date.value = onEdit.birth_date;
+    }
+  }, [onEdit]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const user = ref.current;
+
+    if (onEdit) {
+      await axios
+        .put("http://localhost:8800/users/" + onEdit.id, {
+          name: user.name.value,
+          email: user.email.value,
+          phone: user.phone.value,
+          birth_date: user.birth_date.value,
+        })
+        
+    } 
+    else {
+      await axios
+        .post("http://localhost:8800/users", {
+          name: user.name.value,
+          email: user.email.value,
+          phone: user.phone.value,
+          birth_date: user.birth_date.value,
+        })
+    }
+
+    user.name.value = "";
+    user.email.value = "";
+    user.phone.value = "";
+    user.birth_date.value = "";
+
+    setOnEdit(null);
+    getUsers();
+  };
 
     return (
-        <FormContainer ref={ref}>
+        <FormContainer ref={ref} onSubmit={handleSubmit}>
         <InputArea>
-          <Label>Nome</Label>
-          <Input name="nome" />
+          <Label>Name</Label>
+          <Input name="name" />
         </InputArea>
         <InputArea>
-          <Label>E-mail</Label>
+          <Label>Email</Label>
           <Input name="email" type="email" />
         </InputArea>
         <InputArea>
-          <Label>Telefone</Label>
-          <Input name="fone" />
+          <Label>Phone</Label>
+          <Input name="phone" />
         </InputArea>
         <InputArea>
-          <Label>Data de Nascimento</Label>
-          <Input name="data_nascimento" type="date" />
+          <Label>Birth Date</Label>
+          <Input name="birth_date" type="date" />
         </InputArea>
   
-        <Button type="submit">SALVAR</Button>
+        <Button type="submit">SAVE</Button>
       </FormContainer>
     );
 };
