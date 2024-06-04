@@ -21,7 +21,6 @@ function App() {
   const [onEdit, setOnEdit] = useState(null);
 
   const getUsers = async () => {
-  
     const res = await axios.get("http://localhost:8800/users");
     setUsers(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
   };
