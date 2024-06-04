@@ -1,1 +1,0 @@
-# crud-full-node-react
